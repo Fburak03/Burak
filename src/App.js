@@ -2,16 +2,7 @@ import './App.css';
 import { useState, useEffect } from "react"
 const countriesJSON = require("./countries.json")
 
-function Header({points, color, oldAnswer}){
-  return (
-    <div style={{display: "flex", width: "100vw", backgroundColor: "darkslategray", color: "white", flexDirection: "row", marginBottom: 8, justifyContent: "center", gap: 50, alignItems: "center"}} >
-      <h1>Bayrak Tahmin</h1>
-      <h1 style={{color: [color]}} >Puan: {points}</h1>
-      <h4>Doğru cevap şuydu: {oldAnswer[0]}</h4>
-      <img src={require("./flags/" + oldAnswer[1].toLowerCase() + ".svg")} height={60} />
-    </div>
-  )
-}
+
 
 function Modal({points, visibility, questions}){
   return(
@@ -23,7 +14,29 @@ function Modal({points, visibility, questions}){
   )
 }
 
+function Video({visibility}){
+  return(
+    <div style={{visibility:visibility, position: "fixed", display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", marginTop: 50}} >
+      <iframe width="800" height="500" src="https://www.youtube.com/embed/Bpmd1P6SHck?si=JV3brV7X7AYJBLRx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+  )
+}
+
 function App() {
+
+  const [videoVisibility, setVideoVisibility] = useState("hidden")
+
+  function Header({points, color, oldAnswer}){
+    return (
+      <div style={{display: "flex", width: "100vw", backgroundColor: "darkslategray", color: "white", flexDirection: "row", marginBottom: 8, justifyContent: "center", gap: 50, alignItems: "center"}} >
+        <button onClick={()=>videoVisibility == "hidden" ? setVideoVisibility("visible") : setVideoVisibility("hidden")} >Video</button>
+        <h1>Bayrak Tahmin</h1>
+        <h1 style={{color: [color]}} >Puan: {points}</h1>
+        <h4>Doğru cevap şuydu: {oldAnswer[0]}</h4>
+        <img src={require("./flags/" + oldAnswer[1].toLowerCase() + ".svg")} height={60} />
+      </div>
+    )
+  }
   
   //let isoCodes = Object.keys(iso)
   let countries = Object.values(countriesJSON)
@@ -95,6 +108,7 @@ function App() {
 
   return (
     <div className="App">
+      <Video visibility={videoVisibility} />
       <Modal points={points} visibility={modalVisibility} questions={questions} />
       <Header points={points} color={color} oldAnswer={oldAnswer}/>
       <img src={require("./flags/" + correctAnswer[1].toLowerCase() + ".svg")} height={300} alt='flag'/>
